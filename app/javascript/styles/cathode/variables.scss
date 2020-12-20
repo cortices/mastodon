@@ -2,8 +2,8 @@
 Cathode Church colour scheme
 */
 
-$bright-pink: #f75ae2
-$steel-pink: #d22abc
+$bright-pink: #f75ae2;
+$steel-pink: #d22abc;
 $russian-violet: #42144f;
 $lilac: #bf9bc8;
 $lavender: #e8d9e5;
@@ -11,7 +11,9 @@ $lavender: #e8d9e5;
 // Dependent colors
 $black: #000000;
 
-$classic-base-color: $russian-violet;
-$classic-primary-color: $lilac;
-$classic-secondary-color: $lavender;
-$classic-highlight-color: $steel-pink;
+// Tell UI to use selected colors
+$ui-base-color: $russian-violet !default;                  // Darkest
+$ui-base-lighter-color: lighten($ui-base-color, 26%) !default; // Lighter darkest
+$ui-primary-color: $lilac !default;            // Lighter
+$ui-secondary-color: $lavender !default;        // Lightest
+$ui-highlight-color: $steel-pink !default;
