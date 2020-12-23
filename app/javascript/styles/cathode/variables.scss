@@ -12,8 +12,12 @@ $lavender: #e8d9e5;
 $black: #000000;
 
 // Tell UI to use selected colors
-$ui-base-color: $russian-violet !default;                  // Darkest
-$ui-base-lighter-color: lighten($ui-base-color, 26%) !default; // Lighter darkest
-$ui-primary-color: $lilac !default;            // Lighter
-$ui-secondary-color: $lavender !default;        // Lightest
+$ui-base-color: darken($russian-violet, 8%) !default;                  // Darkest
+$ui-base-lighter-color: $russian-violet !default; // Lighter darkest
+$ui-primary-color: darken($lilac, 8%) !default;            // Lighter
+$ui-secondary-color: darken($lavender, 8%) !default;        // Lightest
 $ui-highlight-color: $steel-pink !default;
+
+$dark-text-color: darken($ui-primary-color, 8%);
+
+$font-display: 'cathode-code-pro-lc' !default;
