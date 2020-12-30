@@ -1,5 +1,13 @@
 #  Mastodon Glitch Edition  #
 
+## <img src="public/apple-touch-icon.png" alt="Cathode Church logo" height="40"/> Cathode Church fork
+
+#### Most recent version tag: `3.3.0_glitch-head_cathode`
+
+Glitch edition with theming for for https://cathode.church.
+
+Maintained by cortices@github, [@s0@cathode.church](https://cathode.church/web/accounts/1) on Fediverse.
+
 >   Now with automated deploys!
 
 [![Build Status](https://img.shields.io/circleci/project/github/glitch-soc/mastodon.svg)][circleci]
