@@ -1,0 +1,26 @@
+/*
+Cathode Church colour scheme
+*/
+
+$bright-pink: #f75ae2;
+$steel-pink: #d22abc;
+$russian-violet: #42144f;
+$lilac: #bf9bc8;
+$lavender: #e8d9e5;
+$princeton-orange: #ff8d41;
+
+// Dependent colors
+$black: #000000;
+
+// Tell UI to use selected colors
+$ui-base-color: darken($russian-violet, 8%) !default;                  // Darkest
+$ui-base-lighter-color: lighten($russian-violet, 17%) !default; // Lighter darkest
+$ui-primary-color: darken($lilac, 8%) !default;            // Lighter
+$ui-secondary-color: lighten($princeton-orange, 13%) !default;        // Lightest
+$ui-highlight-color: $steel-pink !default;
+
+$gold-star: $princeton-orange;
+
+$dark-text-color: darken($ui-primary-color, 8%);
+
+$font-display: 'cathode-code-pro-lc' !default;
