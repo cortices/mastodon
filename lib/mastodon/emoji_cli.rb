@@ -48,6 +48,11 @@ module Mastodon
           
           next if filename.start_with?('._')
 
+          filename = File.basename(entry.full_name, '.*')
+
+          # Skip macOS shadow files
+          next if filename.start_with?('._')
+
           shortcode    = [options[:prefix], filename, options[:suffix]].compact.join
           custom_emoji = CustomEmoji.local.find_by(shortcode: shortcode)
 
