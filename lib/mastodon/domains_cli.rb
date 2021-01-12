@@ -146,6 +146,89 @@ module Mastodon
       end
     end
 
+    option :concurrency, type: :numeric, default: 50, aliases: [:c]
+    option :format, type: :string, default: 'summary', aliases: [:f]
+    option :include_suspended, type: :boolean, default: false, aliases: [:s]
+    desc 'crawl-scum [START] <SCUM>', 'Crawl peers and list ones who federate with scum instances'
+    long_desc <<-LONG_DESC
+      Crawl peers of our peers by using the Mastodon REST API endpoints that expose
+      all known peers, and list instances that peer with a given SCUM instance.
+      Optionally when START is given, crawl peers of that instance instead.
+
+      The --concurrency (-c) option controls the number of threads performing HTTP
+      requests at the same time. More threads means the crawl may complete faster.
+
+      The --format (-f) option controls how the data is displayed at the end. By
+      default (`summary`), a summary of the statistics is returned. The other options
+      are `domains`, which returns a newline-delimited list of all discovered peers,
+      and `json`, which dumps all the aggregated data raw.
+
+      The --include-suspended (-s) option includes already-suspended peers in the scan.
+    LONG_DESC
+    def crawl_scum(start = nil, scum)
+      stats           = Concurrent::Hash.new
+      processed       = Concurrent::AtomicFixnum.new(0)
+      failed          = Concurrent::AtomicFixnum.new(0)
+      start_at        = Time.now.to_f
+      seed            = start ? [start] : Instance.pluck(:domain)
+      blocked_domains = Regexp.new('\\.?' + DomainBlock.where(severity: 1).pluck(:domain).join('|') + '$')
+      scum_regex      = Regexp.new('\\.?' + scum + '$')
+      progress        = create_progress_bar
+
+      pool = Concurrent::ThreadPoolExecutor.new(min_threads: 0, max_threads: options[:concurrency], idletime: 10, auto_terminate: true, max_queue: 0)
+
+      work_unit = ->(domain) do
+        next if stats.key?(domain)
+        next if !options[:include_suspended] && domain.match(blocked_domains)
+
+        stats[domain] = nil
+
+        begin
+          Request.new(:get, "https://#{domain}/api/v1/instance").perform do |res|
+            next unless res.code == 200
+            stats[domain] = Oj.load(res.to_s)
+          end
+
+          Request.new(:get, "https://#{domain}/api/v1/instance/peers").perform do |res|
+            next unless res.code == 200
+
+            # Check if the peers of this peer contains SCUM
+            Oj.load(res.to_s).reject { |peer| stats.key?(peer) }.each do |peer|
+              next unless peer.match(scum_regex)
+              say("#{domain} Federates with scum.")
+            end
+          end
+        rescue StandardError
+          failed.increment
+        ensure
+          processed.increment
+          progress.increment unless progress.finished?
+        end
+      end
+
+      seed.each do |domain|
+        pool.post(domain, &work_unit)
+      end
+
+      sleep 20
+      sleep 20 until pool.queue_length.zero?
+
+      pool.shutdown
+      pool.wait_for_termination(20)
+    ensure
+      progress.finish
+      pool.shutdown
+
+      case options[:format]
+      when 'summary'
+        stats_to_summary(stats, processed, failed, start_at)
+      when 'domains'
+        stats_to_domains(stats)
+      when 'json'
+        stats_to_json(stats)
+      end
+    end
+
     private
 
     def stats_to_summary(stats, processed, failed, start_at)
