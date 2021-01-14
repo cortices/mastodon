@@ -13,7 +13,7 @@ $princeton-orange: #ff8d41;
 $black: #000000;
 
 // Tell UI to use selected colors
-$ui-base-color: darken($russian-violet, 8%) !default;                  // Darkest
+$ui-base-color: darken($russian-violet, 8%) !default;                  // Darkest		== Comes out to #0f0512
 $ui-base-lighter-color: lighten($russian-violet, 17%) !default; // Lighter darkest
 $ui-primary-color: darken($lilac, 8%) !default;            // Lighter
 $ui-secondary-color: lighten($princeton-orange, 13%) !default;        // Lightest

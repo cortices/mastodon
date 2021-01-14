@@ -1,3 +1,10 @@
+// Use Weld's background!
+body {
+  background-image: url(/public/background-cathode.png);
+  background-attachment: fixed;
+  background-repeat: repeat;
+  background-size: 960px 960px; // Tile at native resolution
+}
 
 // Position cathode logo in composing drawer
 .drawer__inner__mastodon {
