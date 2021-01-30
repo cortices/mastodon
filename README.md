@@ -1,3 +1,5 @@
+# ARCHIVED -- New repo at https://gitea.s0.is/s0/mastodon
+  
 #  Mastodon Glitch Edition  #
 
 ## <img src="public/apple-touch-icon.png" alt="Cathode Church logo" height="40"/> Cathode Church fork
